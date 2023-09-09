@@ -14,21 +14,15 @@
 ### Média das notas SiSU
 <p> No `.csv` em que fora realizado o BULK das informações, as notas estavam no formato numérico com vírgula (','), e para o SQL Server contabilizar como número e permitir a execução de funções e operações numéricas, ele precisa estar no formato com ponto ('.'). Então, primeiro converti todas as colunas de todas as tabelas de varchar para float e depois, executei a média de todas as notas, de todas as colunas, de todas as tabelas. </p>
 
-    UPDATE tabela
-    SET coluna = REPLACE(coluna, ',', '.') -- substitui vírgulas por pontos
-    WHERE ISNUMERIC(coluna) = 1; -- filtra apenas valores numéricos
+    -- NOTAS SEM PESO
+    DECLARE @valor_[inicial da área][ano] FLOAT SELECT @valor_[inicial da área][ano] = AVG(CAST(nome_da_coluna AS FLOAT)) FROM nome_da_tabela;
     
-    UPDATE tabela
-    SET coluna = NULL
-    WHERE coluna = ''; -- trata espaços em branco como valores nulos
+    -- NÚMERO DE INSCRITOS
+    DECLARE @inscritos_[ano] INT SELECT @inscritos_ano] = COUNT(*) FROM nome_da_tabela;
     
-    UPDATE tabela
-    SET coluna = LTRIM(RTRIM(coluna)); -- remove espaços em branco
-    
-    SELECT AVG(CAST(coluna AS FLOAT)) AS 'sisu[DISCIPLINA]Media2017' FROM tabela; -- faz a média da todos os valores convertendo-os em float e os apresentando em varchar dado que a configuração da coluna apresenta os dados em varchar
-    DECLARE @valor_[DISCIPLINA]2017 VARCHAR(50)
-    SET @valor_[DISCIPLINA]2017 ='sisu[DISCIPLINA]Media2017' -- armazena o resultado em uma variável varchar
-    PRINT @valor_[DISCIPLINA]2017
+    -- INSERÇÃO NA TABELA
+    INSERT INTO nova_tabela (ano, inscritos, área)
+    VALUES (2017, @inscritos_[ano], @valor_[inicial da área][ano]);
 	
 ### Inscrições SiSU
 <p> A contabilizaçao das inscrições para posterior comparação grafica dos dados se deu por meio do seguinte comando: </p>
