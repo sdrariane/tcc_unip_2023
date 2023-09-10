@@ -65,3 +65,17 @@
     
     -- CONVERTE PARA FLOAT/INT
     UPDATE [tabela] SET [coluna] = CAST([coluna] AS FLOAT);
+
+### Dados Disque 100
+
+#### Agrupamento por Região
+    DECLARE @sul INT SELECT @sul = SUM(CASE WHEN D.vitima_uf IN ('PR', 'RS', 'SC') AND CHARINDEX('Crianças e adolescentes', D.grupo_violacao) > 0 THEN 1 ELSE 0 END)
+    FROM [tabela] AS D;
+    DECLARE @norte INT SELECT @norte = SUM(CASE WHEN D.vitima_uf IN ('AC', 'AP', 'AM', 'PA', 'RO', 'RR', 'TO') AND CHARINDEX('Crianças e adolescentes', D.grupo_violacao) > 0 THEN 1 ELSE 0 END)
+    FROM [tabela] AS D;
+    DECLARE @sudeste INT SELECT @sudeste = SUM(CASE WHEN D.vitima_uf IN ('SP', 'RJ', 'ES', 'MG') AND CHARINDEX('Crianças e adolescentes', D.grupo_violacao) > 0 THEN 1 ELSE 0 END)
+    FROM [tabela] AS D;
+    DECLARE @nordeste INT SELECT @nordeste = SUM(CASE WHEN D.vitima_uf IN ('AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE') AND CHARINDEX('Crianças e adolescentes', D.grupo_violacao) > 0 THEN 1 ELSE 0 END)
+    FROM [tabela] AS D;
+    DECLARE @centro_oeste INT SELECT @centro_oeste = SUM(CASE WHEN D.vitima_uf IN ('DF', 'GO', 'MT', 'MS') AND CHARINDEX('Crianças e adolescentes', D.grupo_violacao) > 0 THEN 1 ELSE 0 END)
+    FROM [tabela] AS D;
