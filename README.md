@@ -14,19 +14,54 @@
 ### Média das notas SiSU
 <p> No `.csv` em que fora realizado o BULK das informações, as notas estavam no formato numérico com vírgula (','), e para o SQL Server contabilizar como número e permitir a execução de funções e operações numéricas, ele precisa estar no formato com ponto ('.'). Então, primeiro converti todas as colunas de todas as tabelas de varchar para float e depois, executei a média de todas as notas, de todas as colunas, de todas as tabelas. </p>
 
-    -- NOTAS SEM PESO
-    DECLARE @valor_[inicial da área][ano] FLOAT SELECT @valor_[inicial da área][ano] = AVG(CAST(nome_da_coluna AS FLOAT)) FROM nome_da_tabela;
+    -- MÉDIAS DAS NOTAS POR ÁREA
+    DECLARE @valor_L2020 FLOAT SELECT @valor_L2020 = AVG(CAST(nota_l AS FLOAT)) FROM [tabela]; -- Linguagens
     
     -- NÚMERO DE INSCRITOS
-    DECLARE @inscritos_[ano] INT SELECT @inscritos_ano] = COUNT(*) FROM nome_da_tabela;
+    DECLARE @inscritos_2020 INT SELECT @inscritos_2020 = COUNT(*) FROM [tabela];
     
-    -- INSERÇÃO NA TABELA
-    INSERT INTO nova_tabela (ano, inscritos, área)
-    VALUES (2017, @inscritos_[ano], @valor_[inicial da área][ano]);
+    -- NÚMERO DE 'M' & 'F'
+    DECLARE @fies_M2020 INT SELECT @fies_Am2020 = SUM(CASE WHEN sexo LIKE '%M%' THEN 1 ELSE 0 END) FROM [tabela];
+    
+    -- NÚMERO DE BRANCOS, AMARELOS E PPI
+    DECLARE @fies_Am2020 INT SELECT @fies_Am2020 = SUM(CASE WHEN raca_cor LIKE '%AMARELA%' THEN 1 ELSE 0 END) FROM [tabela];
+    
+    -- RENDA PER CAPITA POR CLASSE
+    DECLARE @a FLOAT = 0;
+    DECLARE @b FLOAT = 1254;
+    DECLARE @c FLOAT = 1255;
+    DECLARE @d FLOAT = 2004;
+    DECLARE @e FLOAT = 2005;
+    DECLARE @f FLOAT = 8640;
+    DECLARE @g FLOAT = 8641;
+    DECLARE @h FLOAT = 11261;
+    DECLARE @i FLOAT = 11262;
+    
+    DECLARE @classe_E INT SELECT @classe_E = COUNT(*) FROM [tabela] WHERE renda_familiar >= @a AND renda_familiar <= @b;
+    ...
+    DECLARE @classe_A INT SELECT @classe_A = COUNT(*) FROM [tabela] WHERE renda_familiar >= @i;
+    
+    -- MEMBROS FAMÍLIA
+    DECLARE @j FLOAT = 1;
+    DECLARE @k FLOAT = 2;
+    DECLARE @l FLOAT = 3;
+    DECLARE @m FLOAT = 4;
+    
+    DECLARE @n_1 INT SELECT @n_1 = COUNT(*) FROM [tabela] WHERE n_familia = @j;
+    ...
+    DECLARE @n_a INT SELECT @n_a = COUNT(*) FROM [tabela] WHERE n_familia >= @m;
 	
-### Inscrições SiSU
-<p> A contabilizaçao das inscrições para posterior comparação grafica dos dados se deu por meio do seguinte comando: </p>
+### De varchar para float
+<p> Tive que tratar de nulos, mudança de vírgula para ponto e etc.</p>
 
-    SELECT COUNT(*) AS 'variavel_varchar' FROM tabela;
-
-<p> Posteriormente após inseridas em uma tabela única de dados foram convertidas para `float` como explicitado anteriormente. </p>
+    -- VÍRGULA PARA PONTO
+    UPDATE [tabela] SET [coluna] = REPLACE([coluna], ',', '.') WHERE ISNUMERIC([coluna]) = 1;
+    
+    -- TRATA ESPAÇOS EM BRANCO COMO NULOS
+    UPDATE [tabela] SET [coluna] = NULL WHERE [coluna] = '';
+    
+    -- REMOVE ESPAÇOS EM BRANCO
+    UPDATE [tabela] SET [coluna] = LTRIM(RTRIM([coluna]));
+    
+    -- CONVERTE PARA FLOAT/INT
+    UPDATE [tabela] SET [coluna] = CAST([coluna] AS FLOAT);
