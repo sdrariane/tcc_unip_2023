@@ -86,3 +86,18 @@ FROM [tabela] AS D;
 DECLARE @centro_oeste INT SELECT @centro_oeste = SUM(CASE WHEN D.vitima_uf IN ('DF', 'GO', 'MT', 'MS') AND CHARINDEX('Crianças e adolescentes', D.grupo_violacao) > 0 THEN 1 ELSE 0 END)
 FROM [tabela] AS D;
 ```
+
+#### Agupamento por cor
+```sql
+DECLARE @br INT, @pa INT, @pr INT, @am INT, @in INT;
+
+SELECT 
+    @br = SUM(CASE WHEN D.suspeito_pf_cor_raca = 'Branca' THEN 1 ELSE 0 END),
+    @pa = SUM(CASE WHEN D.suspeito_pf_cor_raca = 'Parda' THEN 1 ELSE 0 END),
+    @pr = SUM(CASE WHEN D.suspeito_pf_cor_raca = 'Preta' THEN 1 ELSE 0 END),
+    @am = SUM(CASE WHEN D.suspeito_pf_cor_raca = 'Amarela' THEN 1 ELSE 0 END),
+    @in = SUM(CASE WHEN D.suspeito_pf_cor_raca = 'Indígena' THEN 1 ELSE 0 END)
+FROM [tabela] AS D
+WHERE CHARINDEX('Crianças e adolescentes', grupo_violacao) > 0;
+
+```
