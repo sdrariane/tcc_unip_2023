@@ -110,9 +110,12 @@ WHERE CHARINDEX('Crianças e adolescentes', grupo_violacao) > 0;
 
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart LR
-webStart["Abrir Navegador"]
-aosFatos["Página do Radar"]
-captureData["Capturar Dados"]
+webStart["Abrir
+Navegador"]
+aosFatos["Página
+do Radar"]
+captureData["Capturar
+Dados"]
 socialMedia["
 Web
 Instagram
@@ -121,9 +124,12 @@ Whatsapp
 YouTube
 "]
 
-webEnd["Fechar Navegador"]
-excell["Gravar Informações"]
-sqlServer["Inserir informações"]
+webEnd["Fechar
+Navegador"]
+excell["Inserção
+Excell"]
+sqlServer["Inserção
+SQL Server"]
     
 webStart --> aosFatos
 aosFatos --> captureData
@@ -172,6 +178,48 @@ textPage --> cutFormatText
 
 ```
 
-<p>Ao obter os detalhes da página, copiei todo o texto que continha naquela `<div>` e o cortei obtendo o 'pedaço' de informação que desejava: a pontuação. Em seguida, substitui a vírgula (',') por ponto ('.') para que sua inserção no banco de dados se desse como `double` e não como `varchar`. Por último o converti em número.</p>
+<p>Ao obter os detalhes da página, copiei todo o texto que continha naquela `div` e o cortei obtendo o 'pedaço' de informação que desejava: a pontuação. Em seguida, substitui a vírgula (',') por ponto ('.') para que sua inserção no banco de dados se desse como `double` e não como `varchar`. Por último o converti em número.</p>
+
 ### Inserção Excell
+```mermaid
+
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+
+openExcell["Abrir
+arquivo Excell"]
+
+firstFreeLine["Obter 1ª
+linha linha livre
+da 1ª coluna"]
+
+recordInfo["Gravar
+informações em cada
+coluna de acordo
+com a linha vazia
+mapeada"]
+
+closeExcell["Fechar e
+salvar Excell"]
+
+openExcell --> firstFreeLine --> recordInfo --> closeExcell
+
+```
 ### Inserção SQL Server
+```mermaid
+
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+
+openSQL["Realizar
+conexão SQL"]
+
+executeSQL["Executar
+instrução SQL"]
+
+closeSQL["Realizar
+conexão SQL"]
+
+openSQL --> executeSQL --> closeSQL
+
+```
