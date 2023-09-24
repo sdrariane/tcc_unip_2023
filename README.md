@@ -101,3 +101,66 @@ FROM [tabela] AS D
 WHERE CHARINDEX('Crianças e adolescentes', grupo_violacao) > 0;
 
 ```
+
+------------
+## Script de Automação
+### Fluxo Geral (Main)
+
+```mermaid
+
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+webStart["Abrir Navegador"]
+aosFatos["Página do Radar"]
+captureData["Capturar Dados"]
+socialMedia["
+Web
+Instagram
+Facebook
+Whatsapp
+YouTube
+"]
+
+webEnd["Fechar Navegador"]
+excell["Gravar Informações"]
+sqlServer["Inserir informações"]
+    
+webStart --> aosFatos
+aosFatos --> captureData
+captureData --> socialMedia
+socialMedia --> webEnd
+webEnd --> excell
+excell --> sqlServer
+```
+
+###  Captura de Dados
+```mermaid
+
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+
+accessPage["Acessar os dados da página"]
+detailPage["Obter detalhes da página"]
+loopCondition["A <div> está vazia?"]
+loopAnswerYes["Sim"]
+loopAnswerNoo["Não"]
+waitPage["Aguardar conteúdo da página"]
+textPage["Detalhes obtidos"]
+cutFormatText["Cotar texto, formatar e converter para número"]
+
+    
+accessPage --> detailPage
+detailPage --> loopCondition
+loopCondition --> loopAnswerYes
+loopAnswerYes --> waitPage
+waitPage --> loopCondition
+
+loopCondition --> loopAnswerNoo
+loopAnswerNoo --> textPage
+textPage --> cutFormatText
+
+```
+
+<p>Ao obter os detalhes da página, copiei todo o texto que continha naquela `<div>` e o cortei obtendo o 'pedaço' de informação que desejava: a pontuação. Em seguida, substitui a vírgula (',') por ponto ('.') para que sua inserção no banco de dados se desse como `double` e não como `varchar`. Por último o converti em número.</p>
+### Inserção Excell
+### Inserção SQL Server
