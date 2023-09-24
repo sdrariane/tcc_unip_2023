@@ -139,14 +139,25 @@ excell --> sqlServer
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart LR
 
-accessPage["Acessar os dados da página"]
-detailPage["Obter detalhes da página"]
-loopCondition["A <div> está vazia?"]
+accessPage["Acessar
+os dados
+da página"]
+detailPage["Obter
+detalhes
+da página"]
+loopCondition["A <div> está
+vazia?"]
 loopAnswerYes["Sim"]
 loopAnswerNoo["Não"]
-waitPage["Aguardar conteúdo da página"]
-textPage["Detalhes obtidos"]
-cutFormatText["Cotar texto, formatar e converter para número"]
+waitPage["Aguardar
+conteúdo da
+página"]
+textPage["Detalhes
+obtidos"]
+cutFormatText["Cotar texto,
+formatar e
+converter
+para número"]
 
     
 accessPage --> detailPage
