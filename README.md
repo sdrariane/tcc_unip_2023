@@ -87,7 +87,7 @@ DECLARE @centro_oeste INT SELECT @centro_oeste = SUM(CASE WHEN D.vitima_uf IN ('
 FROM [tabela] AS D;
 ```
 
-#### Agupamento por cor
+#### Agrupamento por cor
 ```sql
 DECLARE @br INT, @pa INT, @pr INT, @am INT, @in INT;
 
