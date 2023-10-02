@@ -1,6 +1,9 @@
 ## Comandos SQL Server
+### Visualização dos dados
+<p> O limite de dados no Excell se limita a 1 milhão de linhas (contando com o cabeçalho), então... Seria impossível abrir CSV por CSV no excell dos dados do SiSU e no mínimo excluir algumas colunas desnecessárias às análises executadas. Existe uma maneira de visualizar e trabahar arquivos grandes de dados no SQL Server, mas preferi não fazer dessa maneira por ser muito trabalhoso e decidi dividir o arquio com mais de 1 milhão de linhas em vários menores limitando-se à 800.000 mil linhas. </p>
+
 ### Inserção em massa dos dados
-<p> Como são ***mais de 5 milhões de dados***, é completamente inviável fazer isso na mão um por um, assim como por limitações técnicas e financeiras, é impossível realizar através da versão gratuita do Microsoft Power Automate em uma máquina com apenas 8GB de RAM. Então, pelo método raiz, realizei o seguinte comando com algumas observações: </p>
+<p> Como são <b>mais de 5 milhões de dados</b>, é completamente inviável fazer isso na mão um por um, assim como por limitações técnicas e financeiras, é impossível realizar através da versão gratuita do Microsoft Power Automate em uma máquina com apenas 8GB de RAM. Então, pelo método raiz, realizei o seguinte comando com algumas observações: </p>
 
 ```sql
 BULK INSERT tabela FROM 'caminho_do_arquivo' WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ';', ROWTERMINATOR = '\n');
@@ -69,6 +72,49 @@ UPDATE [tabela] SET [coluna] = LTRIM(RTRIM([coluna]));
     
 -- CONVERTE PARA FLOAT/INT
 UPDATE [tabela] SET [coluna] = CAST([coluna] AS FLOAT);
+```
+
+#### Agrupamento por Curso
+```sql
+-- NORDESTE 'AL', 'BA', 'CE', 'MA', 'PB', 'PE', 'PI', 'RN', 'SE'
+DECLARE @r1 VARCHAR(255) = 'NORDESTE'; DECLARE @u1 VARCHAR(2) = 'AL'; DECLARE @u2 VARCHAR(2) = 'BA'; DECLARE @u3 VARCHAR(2) = 'CE'; DECLARE @u4 VARCHAR(2) = 'MA';  DECLARE @u5 VARCHAR(2) = 'PB'; DECLARE @u6 VARCHAR(2) = 'PE'; DECLARE @u7 VARCHAR(2) = 'PI'; DECLARE @u8 VARCHAR(2) = 'RN'; DECLARE @u9 VARCHAR(2) = 'SE';
+
+-- NORTE 'AC', 'AP', 'AM', 'PA', 'RO', 'RR', 'TO'
+DECLARE @r2 VARCHAR(255) = 'NORTE'; DECLARE @u10 VARCHAR(2) = 'AC'; DECLARE @u11 VARCHAR(2) = 'AP'; DECLARE @u12 VARCHAR(2) = 'AM'; DECLARE @u13 VARCHAR(2) = 'PA';  DECLARE @u14 VARCHAR(2) = 'RO'; DECLARE @u15 VARCHAR(2) = 'RR'; DECLARE @u16 VARCHAR(2) = 'TO';
+
+-- CENTRO-OESTE 'DF', 'GO', 'MT', 'MS'
+DECLARE @r3 VARCHAR(255) = 'CENTRO-OESTE'; DECLARE @u17 VARCHAR(2) = 'DF'; DECLARE @u18 VARCHAR(2) = 'GO'; DECLARE @u19 VARCHAR(2) = 'MT'; DECLARE @u20 VARCHAR(2) = 'MS';
+
+-- SUDESTE 'SP', 'RJ', 'ES', 'MG'
+DECLARE @r4 VARCHAR(255) = 'SUDESTE'; DECLARE @u21 VARCHAR(2) = 'SP'; DECLARE @u22 VARCHAR(2) = 'RJ'; DECLARE @u23 VARCHAR(2) = 'ES'; DECLARE @u24 VARCHAR(2) = 'MG';
+
+-- SUL 'PR', 'RS', 'SC'
+DECLARE @r5 VARCHAR(255) = 'SUL'; DECLARE @u25 VARCHAR(2) = 'PR'; DECLARE @u26 VARCHAR(2) = 'RS'; DECLARE @u27 VARCHAR(2) = 'SC';
+
+-- VARIÁVEIS
+-- Organizei as regiões em 5 variáveis e os estados em 27, o ojetivo era apenas ir trocando os numeros conforme região e estado sem precisar digitar novamente. Sei que exite a opção de construir uma função e etc., mas preferi realizar assim por me fazer mais sentido.
+DECLARE @regiao VARCHAR(255) = @r5; DECLARE @uf VARCHAR(2) = @u27; DECLARE @curso VARCHAR(255) = 'FILOSOFIA'; DECLARE @ano INT = 2020;
+DECLARE @nota_l FLOAT; DECLARE @nota_h FLOAT; DECLARE @nota_b FLOAT; DECLARE @nota_m FLOAT; DECLARE @nota_r FLOAT;
+DECLARE @nota_candidato FLOAT; DECLARE @num_a INT; DECLARE @num_b INT; DECLARE @num_l INT; DECLARE @num_v INT;
+
+-- NOTAS CANDIDATO
+SELECT 
+    @nota_l = AVG(TRY_CAST(REPLACE(nota_l, ',', '.') AS FLOAT)),
+    @nota_h = AVG(TRY_CAST(REPLACE(nota_h, ',', '.') AS FLOAT)),
+    @nota_b = AVG(TRY_CAST(REPLACE(nota_b, ',', '.') AS FLOAT)),
+    @nota_m = AVG(TRY_CAST(REPLACE(nota_m, ',', '.') AS FLOAT)),
+    @nota_r = AVG(TRY_CAST(REPLACE(nota_r, ',', '.') AS FLOAT)),
+	@nota_candidato = AVG(TRY_CAST(REPLACE(nota_f, ',', '.') AS FLOAT))
+FROM [banco_de_dados] WHERE sexo = 'F' AND uf_candidato = @uf AND status_candidato = 'S';
+
+-- MODALIDADE CANDIDATO
+SELECT 
+    @num_a = COUNT(CASE WHEN modalidade = 'A' THEN 1 ELSE NULL END),
+    @num_b = COUNT(CASE WHEN modalidade = 'B' THEN 1 ELSE NULL END),
+    @num_l = COUNT(CASE WHEN modalidade = 'L' THEN 1 ELSE NULL END),
+    @num_v = COUNT(CASE WHEN modalidade = 'V' THEN 1 ELSE NULL END)
+FROM [banco_de_dados] WHERE sexo = 'F' AND uf_candidato = @uf AND status_candidato = 'S';
+
 ```
 
 ### Dados Disque 100
